@@ -8,6 +8,10 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
+    
+    session[:sort_by] = params[:sort_by]
+    
+    @movies = @movies.order(session[:sort_by])
   end
 
   def new
