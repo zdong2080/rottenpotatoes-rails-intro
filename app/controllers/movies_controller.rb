@@ -7,17 +7,32 @@ class MoviesController < ApplicationController
   end
 
   def index
+
     @movies = Movie.all
-    session[:sort_by] = params[:sort_by]
-    @movies = @movies.order(session[:sort_by])
-    
     @all_ratings = Movie.Ratings
-    session[:ratings] = params[:ratings]
-    if !session[:ratings]
-      session[:ratings] = @all_ratings.map { |rating| [rating, true]}.to_h
+    @ratings_checks = @ratings
+
+
+    if params.key?(:sort_by)
+      session[:sort_by] = params[:sort_by]
     end
-    @selected_ratings = session[:ratings].keys
-    @movies = @movies.where(:rating => @selected_ratings)
+
+    if session[:sort_by] == 'title'
+      @movies = @movies.order(:title)
+    elsif session[:sort_by] == 'release_date'
+      @movies = @movies.order(:release_date)
+    end
+      
+      
+    if params.key?(:ratings)
+      session[:ratings] = params[:ratings].keys
+    end
+    if session.key?(:ratings)
+      @ratings_checks = session[:ratings]
+      @movies = @movies.where(rating: @ratings_checks)
+    end
+    flash.keep
+    
   end
 
   def new
@@ -47,6 +62,8 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
+  
+ 
 
   private
   # Making "internal" methods private is not required, but is a common practice.
