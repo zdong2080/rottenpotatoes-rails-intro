@@ -31,7 +31,7 @@ class MoviesController < ApplicationController
       @ratings_checks = session[:ratings]
       @movies = @movies.where(rating: @ratings_checks)
     end
-    flash.keep
+    
     
   end
 
