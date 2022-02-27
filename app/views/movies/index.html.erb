@@ -3,6 +3,22 @@
 
 <%#  Part 1: Start here... %>
 
+<%#  Section for Part 2 %>
+
+<form method="get" id="ratings_form"> 
+  <br>
+  <h4>
+    Include: 
+    <% @all_ratings.each do |rating| %>
+      <%= rating %>
+      <%= check_box_tag "ratings[#{rating}]", id:"ratings_#{rating}" %>
+    <% end %>
+    
+    <%= submit_tag 'Refresh', :class => 'btn btn-primary', id:"ratings_submit" %>
+  </h4>
+</form>
+
+
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
